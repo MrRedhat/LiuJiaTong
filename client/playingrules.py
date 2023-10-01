@@ -1,7 +1,7 @@
 import copy
 from collections import Counter
 from enum import Enum
-import utils
+from .. import utils
 
 '''
 3 ~ 15 -> 3 ~ 10 + J Q K A 2
@@ -25,7 +25,7 @@ class CardType(Enum):
 
 
 # 尝试凑牌
-def try_transform_cards(card_num, rg, joker_num, try_num):
+def try_transform_cards(card_num: dict, rg, joker_num, try_num):
     for i in rg:
         if card_num.get(i, 0) > try_num:
             return False
@@ -56,12 +56,12 @@ def if_bomb(cards, card_num):
 
 
 # 判断是否为顺子，返回（出牌类型，关键牌，转换后牌）
-def if_straight(cards, card_num, type_num, joker_num):
+def if_straight(cards: list[int], card_num: dict, type_num, joker_num):
     # 保证为5张牌，且非5单张时有王可替
     if len(cards) != 5 or (type_num.get(1, 0) != 5 and joker_num == 0):
         return CardType.illegal_type, 0
 
-    # 保证除大小王外最大与最小牌相差不超过5
+    # 保证除大小王外最大与最小牌相差不超过5, 这里cards是逆序排列的
     if cards[joker_num] - cards[-1] + 1 > 5:
         return CardType.illegal_type, 0
 
@@ -342,9 +342,7 @@ def judge_and_transform_cards(cards: list[int]):
 # 判断为首个出牌时，输入是否合法
 def if_first_input_legal(user_input: list[int]):
     type_card, key_card = judge_and_transform_cards(user_input)
-    if type_card is not CardType.illegal_type:
-        return True
-    return False
+    return type_card is not CardType.illegal_type
 
 
 # 判断存在上家出牌时，输入是否合法
@@ -408,13 +406,13 @@ def if_input_legal(
     user_card: list[int],
     if_first_played=False,
     last_played_cards: list[int]=None
-):
+) -> tuple[bool, int]:
     if last_played_cards is None:
         last_played_cards = []
 
     # 判断输入字符是否合法，并判断是否skip
-    for x in user_input:
-        if x < 0 or ((if_first_played is True or len(user_input) > 1) and x == 0):
+    for _card in user_input:
+        if _card < 0 or ((if_first_played or len(user_input) > 1) and _card == 0):
             return False, 0
     if len(user_input) == 1 and user_input[0] == 0:
         if if_first_played is False:
@@ -424,10 +422,9 @@ def if_input_legal(
 
     _if_enough, score = if_enough_card(user_input, user_card)
     
-    if _if_enough is False:
-        return False, 0
+    if not _if_enough: return False, 0
 
-    user_input.sort(reverse=True)
+    user_input.sort(reverse=True) # 逆序排列
 
     if if_first_played is True:
         return if_first_input_legal(user_input), score
