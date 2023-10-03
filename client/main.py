@@ -2,11 +2,12 @@ import json
 import socket
 import struct
 import time
-import utils
-from userinfo import UserInfo
-from interface import main_interface, game_over_interface
-from playing_handler import playing
 import argparse
+
+import utils
+from client.userinfo import UserInfo
+from client.interface import main_interface, game_over_interface
+from client.playing_handler import playing
 
 RECV_LEN = 1024
 HEADER_LEN = 4

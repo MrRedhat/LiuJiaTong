@@ -1,49 +1,22 @@
+cardDictSI = {
+    '3': 3, '4': 4, '5': 5, '6': 6,
+    '7': 7, '8': 8, '9': 9, 'B': 10,
+    'J': 11, 'Q': 12, 'K': 13, 'A': 14,
+    '2': 15, '0': 16, '1': 17, 'F': 0
+}
+cardDictIS = {
+    3: '3', 4: '4', 5: '5', 6: '6',
+    7: '7', 8: '8', 9: '9', 10: 'B',
+    11: 'J', 12: 'Q', 13: 'K', 14: 'A',
+    15: '2', 16: '0', 17: '1', 0: 'F'
+}
 def str_to_int(c=''):
-    if '3' <= c <= '9':
-        return int(c)
-    elif c == 'B':
-        return 10
-    elif c == 'J':
-        return 11
-    elif c == 'Q':
-        return 12
-    elif c == 'K':
-        return 13
-    elif c == 'A':
-        return 14
-    elif c == '2':
-        return 15
-    elif c == '0':  # joker
-        return 16
-    elif c == '1':
-        return 17
-    elif c == 'F':  # skip this round
-        return 0
-    return -1
+    return cardDictSI[c] if c in cardDictSI else -1
 
 
 def int_to_str(x=-1):
-    if 3 <= x <= 9:
-        return str(x)
-    elif x == 10:
-        return 'B'
-    elif x == 11:
-        return 'J'
-    elif x == 12:
-        return 'Q'
-    elif x == 13:
-        return 'K'
-    elif x == 14:
-        return 'A'
-    elif x == 15:
-        return '2'
-    elif x == 16:  # joker
-        return '0'
-    elif x == 17:
-        return '1'
-    elif x == 0:  # skip this round
-        return 'F'
-    return '-'
+    print("This is x:", x)
+    return cardDictIS[x] if x in cardDictIS else '-'
 
 
 # 返回上一位出牌玩家下标

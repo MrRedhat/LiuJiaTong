@@ -6,8 +6,9 @@ import time
 import select
 import psutil
 from enum import Enum
-from playingrules import if_input_legal
-from userinfo import UserInfo
+
+from client.playingrules import if_input_legal
+from client.userinfo import UserInfo
 
 def show_playingcards(
     now_played_cards,
